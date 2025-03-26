@@ -1,29 +1,12 @@
-import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
-
 const HomePage = () => {
-  const { user } = useAuth();
-
   return (
-    <div className="home-page">
-      <section className="hero">
-        <h1>Welcome to ChatApp</h1>
-        <p>Connect with your team in real-time</p>
-        
-        {user ? (
-          <div className="auth-buttons">
-            <Link to="/chat" className="cta-button">
-              Go to Chat
-            </Link>
-          </div>
-        ) : (
-          <div className="auth-buttons">
-            <Link to="/auth/login" className="cta-button">
-              Get Started
-            </Link>
-          </div>
-        )}
-      </section>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="max-w-2xl text-center">
+        <h1 className="text-4xl font-bold mb-6">Welcome to GPT Chatbot</h1>
+        <p className="text-xl text-gray-600 mb-8">
+          Your intelligent AI assistant for engaging conversations and helpful responses.
+        </p>
+      </div>
     </div>
   );
 };

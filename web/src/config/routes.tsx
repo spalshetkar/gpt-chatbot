@@ -1,69 +1,42 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import App from '../App';
-import ProtectedRoute from '../components/auth/ProtectedRoute';
-import AuthLayout from '../components/layout/AuthLayout';
-import MainLayout from '../components/layout/MainLayout';
-import LoadingFallback from '../components/common/LoadingFallback';
-import ErrorFallback from '../components/common/ErrorFallback';
+import RootLayout from '../layout/RootLayout';
+import MainLayout from '../layout/MainLayout';
+import HomePage from '../pages/HomePage';
+import { ProtectedRoute } from '../components/ProtectedRoute';
+import ChatPage from '../pages/ChatPage';
 
-// Lazy-loaded page components
-const HomePage = lazy(() => import('../pages/HomePage'));
-const ChatPage = lazy(() => import('../pages/ChatPage'));
-const LoginPage = lazy(() => import('../pages/LoginPage'));
-const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
-
-export const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
-    element: <App />,
-    errorElement: <ErrorFallback />,
+    element: <RootLayout />,
     children: [
+      // Public routes
       {
-        element: <MainLayout />,
+        index: true,
+        element: <HomePage />,
+      },
+      // Protected routes
+      {
+        path: '/app',
+        element: (
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        ),
         children: [
           {
             index: true,
-            element: (
-              <Suspense fallback={<LoadingFallback />}>
-                <HomePage />
-              </Suspense>
-            )
+            element: <ChatPage />,
           },
           {
-            path: 'chat',
-            element: (
-              <ProtectedRoute>
-                <Suspense fallback={<LoadingFallback />}>
-                  <ChatPage />
-                </Suspense>
-              </ProtectedRoute>
-            )
-          }
-        ]
+            path: 'chat/:chatId',
+            element: <ChatPage />,
+          },
+        ],
       },
-      {
-        path: '/auth',
-        element: <AuthLayout />,
-        children: [
-          {
-            path: 'login',
-            element: (
-              <Suspense fallback={<LoadingFallback />}>
-                <LoginPage />
-              </Suspense>
-            )
-          }
-        ]
-      },
-      {
-        path: '*',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage />
-          </Suspense>
-        )
-      }
-    ]
-  }
-]);
+    ],
+  },
+];
+
+export const router = createBrowserRouter(routes);
+

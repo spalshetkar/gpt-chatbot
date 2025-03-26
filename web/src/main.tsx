@@ -1,14 +1,14 @@
+import './index.css';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './config/routes';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { queryClient } from './lib/react-query';
 
-const App = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-};
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+const container = document.getElementById('root');
+const root = createRoot(container!);
 
-export default App;
+root.render(
+    <StrictMode>
+        <RouterProvider router={router} />
+    </StrictMode>
+);
